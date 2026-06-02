@@ -309,10 +309,3 @@ Potential extensions include:
 ## Author
 
 Divya Natekar
-
-M.S. Urban Data Science
-New York University (NYU)
-
-## License
-
-MIT License
