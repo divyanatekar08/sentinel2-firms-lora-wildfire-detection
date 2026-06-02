@@ -16,8 +16,6 @@ A pretrained EfficientNetV2B0 backbone is adapted using a custom low-rank adapta
 
 The project demonstrates how remote sensing and AI can be integrated for scalable environmental monitoring and urban resilience applications.
 
----
-
 ## Motivation
 
 Wildfires are increasing in frequency and intensity due to climate change, drought conditions, and expanding urban-wildland interfaces.
