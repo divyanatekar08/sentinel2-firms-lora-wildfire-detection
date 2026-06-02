@@ -22,8 +22,6 @@ Wildfires are increasing in frequency and intensity due to climate change, droug
 
 Traditional monitoring systems rely heavily on thermal anomaly alerts and manual interpretation. This project explores whether satellite imagery combined with parameter-efficient deep learning can automatically identify wildfire-related spatial patterns and generate geospatial wildfire probability maps.
 
----
-
 ## Data Sources
 
 ### NASA FIRMS
@@ -44,8 +42,6 @@ Dataset:
 
 - VIIRS SNPP Standard Processing (VIIRS_SNPP_SP)
 
----
-
 ### Sentinel-2
 
 Source:
@@ -64,8 +60,6 @@ Bands used:
 - B3 (Green)
 - B2 (Blue)
 
----
-
 ### Google Earth Engine
 
 Source:
@@ -81,8 +75,6 @@ Used for:
 Dataset:
 
 - COPERNICUS/S2_SR_HARMONIZED
-
----
 
 ## Study Area
 
@@ -101,8 +93,6 @@ Study Period:
 
 July 2021 – October 2021
 
----
-
 ## Methodology
 
 ### 1. Wildfire Detection Retrieval
@@ -110,8 +100,6 @@ July 2021 – October 2021
 NASA FIRMS wildfire detections are downloaded using the FIRMS API.
 
 High-confidence detections are retained.
-
----
 
 ### 2. Dataset Construction
 
@@ -123,8 +111,6 @@ Negative Samples:
 
 - Random locations spatially separated from known wildfire events
 
----
-
 ### 3. Satellite Image Retrieval
 
 Sentinel-2 imagery is retrieved from Google Earth Engine.
@@ -134,8 +120,6 @@ For each sample:
 - Cloud filtering applied
 - RGB composite generated
 - 224 × 224 image tile exported
-
----
 
 ### 4. Deep Learning Pipeline
 
@@ -156,8 +140,6 @@ Advantages:
 - Reduced trainable parameters
 - Faster fine-tuning
 - Lower memory requirements
-
----
 
 ## Model Architecture
 
@@ -185,8 +167,6 @@ Dense Classification Head
 
 Wildfire Probability
 
----
-
 ## Dataset Split
 
 Stratified split:
@@ -198,8 +178,6 @@ Stratified split:
 | Testing | 20% |
 
 Class distributions were preserved using stratified sampling.
-
----
 
 ## Results
 
@@ -224,8 +202,6 @@ Outputs generated:
 - Confusion matrix visualizations
 - Probability distributions
 - Interactive Folium wildfire maps
-
----
 
 ## Repository Structure
 
@@ -255,8 +231,6 @@ sentinel2_firms_tf_lora/
 └── wildfire_detection.ipynb
 ```
 
----
-
 ## Installation
 
 Clone the repository:
@@ -273,8 +247,6 @@ Install dependencies:
 pip install tensorflow earthengine-api geemap folium pandas numpy scikit-learn pillow tqdm requests
 ```
 
----
-
 ## Required Credentials
 
 ### NASA FIRMS API Key
@@ -289,8 +261,6 @@ Store as:
 FIRMS_MAP_KEY
 ```
 
----
-
 ### Google Earth Engine
 
 Create a project and authenticate:
@@ -304,8 +274,6 @@ Set:
 ```text
 GEE_PROJECT
 ```
-
----
 
 ## Running the Project
 
@@ -326,8 +294,6 @@ The workflow will:
 5. Evaluate performance
 6. Generate wildfire prediction maps
 
----
-
 ## Future Improvements
 
 Potential extensions include:
@@ -340,16 +306,12 @@ Potential extensions include:
 - Explainable AI (Grad-CAM)
 - Foundation models for Earth observation
 
----
-
 ## Author
 
 Divya Natekar
 
-M.S. Management of Technology  
+M.S. Urban Data Science
 New York University (NYU)
-
----
 
 ## License
 
