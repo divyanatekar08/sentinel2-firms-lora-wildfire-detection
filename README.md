@@ -18,7 +18,7 @@ The project demonstrates how remote sensing and AI can be integrated for scalabl
 
 ## Motivation
 
-Wildfires are increasing in frequency and intensity due to climate change, drought conditions, and expanding urban-wildland interfaces.
+Wildfires continue to increase in frequency and severity due to climate change, drought conditions, and expanding urban-wildland interfaces.
 
 Traditional monitoring systems rely heavily on thermal anomaly alerts and manual interpretation. This project explores whether satellite imagery combined with parameter-efficient deep learning can automatically identify wildfire-related spatial patterns and generate geospatial wildfire probability maps.
 
@@ -27,10 +27,6 @@ Traditional monitoring systems rely heavily on thermal anomaly alerts and manual
 ### NASA FIRMS
 
 Fire Information for Resource Management System (FIRMS)
-
-Source:
-
-https://firms.modaps.eosdis.nasa.gov/
 
 Used for:
 
@@ -42,45 +38,49 @@ Dataset:
 
 - VIIRS SNPP Standard Processing (VIIRS_SNPP_SP)
 
-### Sentinel-2
-
 Source:
 
-https://sentinel.esa.int/
+https://firms.modaps.eosdis.nasa.gov/
+
+### Sentinel-2
 
 Used for:
 
-- High-resolution satellite imagery
-- RGB image tile generation
-- Wildfire visual pattern detection
+- Satellite image retrieval
+- Wildfire image tile generation
+- Environmental feature extraction
 
-Bands used:
+Bands Used:
 
 - B4 (Red)
 - B3 (Green)
 - B2 (Blue)
 
-### Google Earth Engine
-
 Source:
 
-https://earthengine.google.com/
+https://sentinel.esa.int/
+
+### Google Earth Engine
 
 Used for:
 
-- Satellite image retrieval
+- Satellite image acquisition
 - Cloud filtering
-- Geospatial image processing
+- Geospatial processing
 
 Dataset:
 
 - COPERNICUS/S2_SR_HARMONIZED
 
+Source:
+
+https://earthengine.google.com/
+
 ## Study Area
 
 California, USA
 
-Bounding Box:
+Bounding Coordinates:
 
 | Boundary | Value |
 |-----------|---------|
@@ -95,65 +95,45 @@ July 2021 – October 2021
 
 ## Methodology
 
-### 1. Wildfire Detection Retrieval
+### Step 1
 
-NASA FIRMS wildfire detections are downloaded using the FIRMS API.
+Download wildfire detections from NASA FIRMS.
 
-High-confidence detections are retained.
+### Step 2
 
-### 2. Dataset Construction
+Generate wildfire and non-wildfire locations.
 
-Positive Samples:
+### Step 3
 
-- FIRMS wildfire detections
+Retrieve Sentinel-2 satellite imagery using Google Earth Engine.
 
-Negative Samples:
+### Step 4
 
-- Random locations spatially separated from known wildfire events
+Create a labeled satellite image dataset.
 
-### 3. Satellite Image Retrieval
+### Step 5
 
-Sentinel-2 imagery is retrieved from Google Earth Engine.
+Train a LoRA-inspired EfficientNetV2B0 classifier.
 
-For each sample:
+### Step 6
 
-- Cloud filtering applied
-- RGB composite generated
-- 224 × 224 image tile exported
+Evaluate model performance.
 
-### 4. Deep Learning Pipeline
+### Step 7
 
-Base Model:
-
-- EfficientNetV2B0 (ImageNet pretrained)
-
-Adaptation:
-
-- Custom LoRA-inspired low-rank adaptation layer
-
-Framework:
-
-- TensorFlow / Keras
-
-Advantages:
-
-- Reduced trainable parameters
-- Faster fine-tuning
-- Lower memory requirements
+Generate geospatial wildfire prediction maps.
 
 ## Model Architecture
 
-Input Image
-(224 × 224 RGB)
+Input Image (224×224 RGB)
 
 ↓
 
 EfficientNetV2B0 Backbone
-(Frozen)
 
 ↓
 
-Global Feature Embedding
+Global Feature Extraction
 
 ↓
 
@@ -169,7 +149,7 @@ Wildfire Probability
 
 ## Dataset Split
 
-Stratified split:
+The dataset was split using stratified sampling.
 
 | Dataset | Percentage |
 |----------|------------|
@@ -177,122 +157,87 @@ Stratified split:
 | Validation | 16% |
 | Testing | 20% |
 
-Class distributions were preserved using stratified sampling.
+This preserves wildfire and non-wildfire class distributions across all subsets.
 
 ## Results
 
-The trained model successfully learned wildfire-related visual patterns including:
+The model learned wildfire-related visual patterns including:
 
 - Smoke plumes
 - Burn scars
 - Vegetation damage
 - Thermal anomaly regions
 
-Evaluation metrics included:
+Generated outputs include:
 
-- Accuracy
-- Precision
-- Recall
-- AUC
 - Confusion Matrix
-
-Outputs generated:
-
-- Prediction CSV files
-- Confusion matrix visualizations
-- Probability distributions
-- Interactive Folium wildfire maps
+- Probability Distribution Plots
+- Test Metrics
+- Interactive Wildfire Prediction Maps
 
 ## Repository Structure
 
 ```text
 sentinel2_firms_tf_lora/
-│
-├── outputs/
-│   ├── confusion_matrix.png
-│   ├── wildfire_prediction_map.html
-│   ├── fire_probability_distribution.png
-│   └── test_metrics.json
+
+├── SENTINEL2_FIRMS_TF_LORA_PROGRAM.ipynb
 │
 ├── model/
-│   └── tf_lora_wildfire_model.keras
+│   └── trained TensorFlow model
+│
+├── outputs/
+│   ├── confusion matrix
+│   ├── prediction results
+│   ├── wildfire maps
+│   └── evaluation metrics
 │
 ├── raw/
-│   └── firms_fire_points.csv
+│   └── downloaded wildfire detections
 │
 ├── tiles/
-│   ├── fire/
-│   └── normal/
+│   ├── fire
+│   └── normal
 │
+├── samples.csv
+├── tile_metadata.csv
 ├── train_metadata.csv
 ├── val_metadata.csv
-├── test_metadata.csv
-│
-└── wildfire_detection.ipynb
+└── test_metadata.csv
 ```
 
-## Installation
+## Technologies Used
 
-Clone the repository:
-
-```bash
-git clone https://github.com/divyanatekar08/sentinel2-firms-lora-wildfire-detection.git
-
-cd sentinel2-firms-lora-wildfire-detection
-```
-
-Install dependencies:
-
-```bash
-pip install tensorflow earthengine-api geemap folium pandas numpy scikit-learn pillow tqdm requests
-```
-
-## Required Credentials
-
-### NASA FIRMS API Key
-
-Obtain from:
-
-https://firms.modaps.eosdis.nasa.gov/api/
-
-Store as:
-
-```text
-FIRMS_MAP_KEY
-```
-
-### Google Earth Engine
-
-Create a project and authenticate:
-
-```bash
-earthengine authenticate
-```
-
-Set:
-
-```text
-GEE_PROJECT
-```
+- Python
+- TensorFlow / Keras
+- Google Earth Engine
+- NASA FIRMS API
+- Pandas
+- NumPy
+- Scikit-Learn
+- Folium
+- Pillow
+- Requests
 
 ## Running the Project
 
-Open:
+1. Configure Google Earth Engine authentication.
+2. Add your FIRMS API key.
+3. Open the notebook:
 
-```text
-wildfire_detection.ipynb
+```bash
+jupyter notebook SENTINEL2_FIRMS_TF_LORA_PROGRAM.ipynb
 ```
 
-Run all notebook cells sequentially.
+4. Run notebook cells sequentially.
 
-The workflow will:
+The notebook will:
 
-1. Download FIRMS detections
-2. Generate wildfire and non-wildfire samples
-3. Retrieve Sentinel-2 imagery
-4. Train the LoRA-inspired model
-5. Evaluate performance
-6. Generate wildfire prediction maps
+- Download wildfire detections
+- Retrieve Sentinel-2 imagery
+- Generate training data
+- Train the model
+- Evaluate results
+- Create wildfire prediction maps
 
 ## Future Improvements
 
@@ -301,11 +246,15 @@ Potential extensions include:
 - Multispectral Sentinel-2 bands
 - Vision Transformers
 - Temporal wildfire forecasting
-- Weather and vegetation integration
-- Semantic segmentation
+- Weather data integration
+- Vegetation index features
 - Explainable AI (Grad-CAM)
-- Foundation models for Earth observation
+- Earth observation foundation models
 
 ## Author
 
 Divya Natekar
+
+M.S. Urban Data Science
+
+New York University (NYU)
